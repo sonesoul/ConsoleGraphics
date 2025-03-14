@@ -1,15 +1,19 @@
 ﻿using System;
 using System.Drawing;
 using System.Text;
+using static ConsoleGraphics.InteropRenderer;
 
 namespace ConsoleGraphics
 {
     public class Canvas
     {
-        public int Width { get; } = 0;
-        public int Height { get; } = 0;
+        public int Width { get; } 
+        public int Height { get; } 
+        public char PixelLeft { get; } = ' ';
+        public char PixelRight { get; } = ' ';
 
         private readonly Pixel[,] _pixels;
+        private readonly CHAR_INFO[] _infos; 
 
         public Canvas(Point size)
         {
@@ -20,6 +24,7 @@ namespace ConsoleGraphics
             Height = size.Y;
 
             _pixels = new Pixel[Width, Height];
+            _infos = new CHAR_INFO[Width * 2 * Height];
         }
 
         public void Render()
@@ -33,7 +38,7 @@ namespace ConsoleGraphics
                 for (int x = 0; x < Width; x++)
                 {
                     Pixel current = _pixels[x, y];
-                    sb.Append(current.Content);
+                    sb.Append($"{PixelLeft}{PixelRight}");
 
                     void Write()
                     {
@@ -76,6 +81,7 @@ namespace ConsoleGraphics
                 }
             }
         }
+        public void RenderNative() => WriteBuffer(_infos, Width * 2, Height);
 
         public void Fill(Pixel pixel)
         {
@@ -87,13 +93,20 @@ namespace ConsoleGraphics
                 }
             }
         }
-
         public void SetPixel(int x, int y, Pixel pixel)
         {
-            if (_pixels[x, y] != pixel)
-            {
-                _pixels[x, y] = pixel;
-            }
+            _pixels[x, y] = pixel;
+
+            var left = ToCharInfo(pixel);
+            var right = ToCharInfo(pixel);
+
+            left.UnicodeChar = PixelLeft;
+            right.UnicodeChar = PixelRight;
+
+            _infos[(x * 2) + y * (Width * 2)] = left;
+            _infos[(x * 2) + 1 + y * (Width * 2)] = right;
         }
+
+        public Pixel GetPixel(int x, int y) => _pixels[x, y];
     }
 }

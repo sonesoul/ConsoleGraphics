@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Drawing;
+using System.IO;
+using System.Threading;
 
 namespace ConsoleGraphics
 {
@@ -10,11 +12,17 @@ namespace ConsoleGraphics
      
         private static Canvas canvas;
 
+        private static int index = 0;
+
+        private static string[] paths;
+
         static void Main(string[] args)
         {
             Console.ReadLine();
-            canvas = new(new Point(Console.WindowWidth / 2, Console.WindowHeight));
             Console.CursorVisible = false;
+            
+            Point size = new(Console.WindowWidth / 2, Console.WindowHeight - 1);
+            canvas = new(size);
 
             GameOfLife game = new(Width, Height);
 
@@ -25,7 +33,7 @@ namespace ConsoleGraphics
                 game.Step();
                 game.Draw(canvas);
 
-                canvas.Render();
+                canvas.RenderNative();
             }
         }
     }

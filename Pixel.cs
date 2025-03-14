@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ConsoleGraphics
 {
@@ -12,23 +8,19 @@ namespace ConsoleGraphics
         public static Pixel White => new(ConsoleColor.White);
         public static Pixel Black => new(ConsoleColor.Black);
 
-        public const string DefaultContent = "  ";
-
-        public string Content { get; }
         public ConsoleColor BackColor { get; }
         public ConsoleColor ForeColor { get; }
 
         private readonly int _hash;
 
-        public Pixel(ConsoleColor backColor, ConsoleColor foreColor, string content)
+        public Pixel(ConsoleColor backColor, ConsoleColor foreColor)
         {
             BackColor = backColor;
-            ForeColor = foreColor;
-            Content = content;
+            ForeColor = foreColor;            
 
-            _hash = HashCode.Combine(Content, BackColor, ForeColor);
+            _hash = HashCode.Combine(BackColor, ForeColor);
         }
-        public Pixel(ConsoleColor backColor) : this(backColor, ConsoleColor.White, DefaultContent)
+        public Pixel(ConsoleColor backColor) : this(backColor, ConsoleColor.White)
         {
 
         }
