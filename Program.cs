@@ -12,10 +12,6 @@ namespace ConsoleGraphics
      
         private static Canvas canvas;
 
-        private static int index = 0;
-
-        private static string[] paths;
-
         static void Main(string[] args)
         {
             Console.ReadLine();
