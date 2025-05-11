@@ -50,6 +50,10 @@ namespace ConsoleGraphics
                 UnicodeChar = ' ', 
             };
         }
+        public static Pixel ToPixel(ushort attributes)
+        {
+            return new((ConsoleColor)((attributes >> 4) & 0x0F), (ConsoleColor)(attributes & 0x0F));
+        }
 
         public static void WriteBuffer(CHAR_INFO[] buffer, int width, int height)
         {
