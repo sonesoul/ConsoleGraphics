@@ -7,29 +7,29 @@ namespace ConsoleGraphics
 {
     internal class Program
     {
-        private static int Width => canvas.Width;
-        private static int Height => canvas.Height;
-     
-        private static Canvas canvas;
+        private static int Width => pixelBuffer.Width;
+        private static int Height => pixelBuffer.Height;
 
-        static void Main(string[] args)
+        private static PixelBuffer pixelBuffer;
+
+        static void Main()
         {
             Console.ReadLine();
             Console.CursorVisible = false;
             
             Point size = new(Console.WindowWidth / 2, Console.WindowHeight - 1);
-            canvas = new(size);
+            var canvas = pixelBuffer = new NativeCanvas(size);
 
             GameOfLife game = new(Width, Height);
 
             while (true)
             {
-                canvas.Fill(new(ConsoleColor.Blue));
+                canvas.Flush(new(ConsoleColor.Blue));
 
                 game.Step();
                 game.Draw(canvas);
 
-                canvas.RenderNative();
+                canvas.Draw();
             }
         }
     }
@@ -126,13 +126,13 @@ namespace ConsoleGraphics
             return cells[x, y] ? ConsoleColor.White : ConsoleColor.Blue;
         }
 
-        public void Draw(Canvas canvas)
+        public void Draw(PixelBuffer buffer)
         {
-            for (int y = 0; y < canvas.Height; y++)
+            for (int y = 0; y < buffer.Height; y++)
             {
-                for (int x = 0; x < canvas.Width; x++)
+                for (int x = 0; x < buffer.Width; x++)
                 {
-                    canvas.SetPixel(x, y, new Pixel(GetColor(x, y)));
+                    buffer.SetPixel(x, y, new Pixel(GetColor(x, y)));
                 }
             }
         }
