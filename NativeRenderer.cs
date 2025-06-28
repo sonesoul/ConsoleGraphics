@@ -3,7 +3,7 @@ using System.Runtime.InteropServices;
 
 namespace ConsoleGraphics
 {
-    public class InteropRenderer
+    public class NativeRenderer
     {
         [StructLayout(LayoutKind.Explicit, CharSet = CharSet.Unicode)]
         public struct CHAR_INFO

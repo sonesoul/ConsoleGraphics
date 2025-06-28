@@ -2,7 +2,7 @@
 using System.Drawing;
 using System.Net;
 using System.Text;
-using static ConsoleGraphics.InteropRenderer;
+using static ConsoleGraphics.NativeRenderer;
 
 namespace ConsoleGraphics
 {
