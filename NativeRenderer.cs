@@ -42,12 +42,12 @@ namespace ConsoleGraphics
 
         const int STD_OUTPUT_HANDLE = -11;
 
-        public static CHAR_INFO ToCharInfo(Pixel pixel)
+        public static CHAR_INFO ToCharInfo(ConsoleColor foreColor, ConsoleColor backColor, char character)
         {
             return new() 
             {
-                Attributes = (ushort)((int)pixel.ForeColor | ((int)pixel.BackColor << 4)),
-                UnicodeChar = ' ', 
+                Attributes = (ushort)((int)foreColor | ((int)backColor << 4)),
+                UnicodeChar = character, 
             };
         }
         public static Pixel ToPixel(ushort attributes)

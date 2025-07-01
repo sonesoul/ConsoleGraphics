@@ -10,11 +10,11 @@ namespace ConsoleGraphics
         public override void Draw() => WriteBuffer(_infos, OriginalWidth, Height);
         public override void SetPixel(int x, int y, Pixel pixel)
         {
-            CHAR_INFO left = ToCharInfo(pixel);
-            CHAR_INFO right = ToCharInfo(pixel);
+            var foreColor = pixel.ForeColor;
+            var backColor = pixel.BackColor;
 
-            left.UnicodeChar = PixelLeft;
-            right.UnicodeChar = PixelRight;
+            CHAR_INFO left = ToCharInfo(foreColor, backColor, PixelLeft);
+            CHAR_INFO right = ToCharInfo(foreColor, backColor, PixelRight);
 
             _infos[(x * 2) + y * OriginalWidth] = left;
             _infos[(x * 2) + 1 + y * OriginalWidth] = right;
