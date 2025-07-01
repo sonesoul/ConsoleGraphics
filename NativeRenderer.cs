@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ConsoleGraphics.Rendering;
+using System;
 using System.Runtime.InteropServices;
 
 namespace ConsoleGraphics
