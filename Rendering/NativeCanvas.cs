@@ -1,5 +1,5 @@
 ﻿using System.Drawing;
-using static ConsoleGraphics.NativeRenderer;
+using static ConsoleGraphics.NativeInterop;
 
 namespace ConsoleGraphics.Rendering
 {
