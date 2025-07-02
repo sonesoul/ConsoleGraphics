@@ -1,34 +1,39 @@
-﻿using System;
-using System.Drawing;
-using ConsoleGraphics.Rendering;
+﻿using ConsoleGraphics.Rendering;
+using KernelTerminal;
+using System;
 
 namespace ConsoleGraphics
 {
     internal class Program
     {
-        private static int Width => pixelBuffer.Width;
-        private static int Height => pixelBuffer.Height;
-
-        private static PixelBuffer pixelBuffer;
-
         static void Main()
         {
-            Console.ReadLine();
-            Console.CursorVisible = false;
-            
-            Point size = new(Console.WindowWidth / 2, Console.WindowHeight - 1);
-            var canvas = pixelBuffer = new NativeCanvas(size);
+            int width = 200;
+            int height = 200;
 
-            GameOfLife game = new(Width, Height);
+            Terminal.Open(WindowStyle.Default);
+            Terminal.SetFontSize(0, 2);
+            
+            NativeRenderer renderer = new(width, height);
+
+            width *= 2;
+            Console.SetWindowSize(width, height);
+            Console.SetBufferSize(width, height);
+            Console.SetWindowSize(width, height);
+            
+            Console.CursorVisible = false;
+
+            Console.ReadLine();
+
+            GameOfLife game = new(width, height);
 
             while (true)
             {
-                canvas.Flush(new(ConsoleColor.Blue));
-
+                renderer.Flush(Pixel.Black);
                 game.Step();
-                game.Draw(canvas);
+                game.Draw(renderer);
 
-                canvas.Draw();
+                renderer.Render();
             }
         }
     }
@@ -125,13 +130,13 @@ namespace ConsoleGraphics
             return cells[x, y] ? ConsoleColor.White : ConsoleColor.Blue;
         }
 
-        public void Draw(PixelBuffer buffer)
+        public void Draw(IRenderer renderer)
         {
-            for (int y = 0; y < buffer.Height; y++)
+            for (int y = 0; y < renderer.Height; y++)
             {
-                for (int x = 0; x < buffer.Width; x++)
+                for (int x = 0; x < renderer.Width; x++)
                 {
-                    buffer.SetPixel(x, y, new Pixel(GetColor(x, y)));
+                    renderer.SetPixel(x, y, new Pixel(GetColor(x, y)));
                 }
             }
         }

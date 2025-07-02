@@ -1,14 +1,31 @@
 ﻿using System;
-using System.Drawing;
 using System.Text;
 
-namespace ConsoleGraphics
+namespace ConsoleGraphics.Rendering
 {
-    public class Canvas(Point size) : PixelBuffer(size)
+    public class Renderer : IRenderer
     {
-        private readonly Pixel[,] _pixels = new Pixel[size.X, size.Y];
+        public int Width { get; private set; } = 1;
+        public int Height { get; private set; } = 1;
 
-        public override void Draw()
+        public char PixelLeft { get; set; } = ' ';
+        public char PixelRight { get; set; } = ' ';
+
+        public const int PixelWidth = 2;
+
+        private Pixel[,] _pixels = new Pixel[1, 1];
+
+        public Renderer(int width, int height) => SetSize(width, height);
+
+        public void SetSize(int width, int height)
+        {
+            Width = width;
+            Height = height;
+            
+            _pixels = new Pixel[width, height];
+        }
+
+        public void Render()
         {
             StringBuilder sb = new(_pixels.Length);
             int writeX = 0;
@@ -62,7 +79,19 @@ namespace ConsoleGraphics
                 }
             }
         }
-        public override void SetPixel(int x, int y, Pixel pixel) => _pixels[x, y] = pixel;
-        public override Pixel GetPixel(int x, int y) => _pixels[x, y];
+
+        public void SetPixel(int x, int y, Pixel pixel) => _pixels[x, y] = pixel;
+        public Pixel GetPixel(int x, int y) => _pixels[x, y];
+
+        public void Flush(Pixel pixel)
+        {
+            for (int y = 0; y < Height; y++)
+            {
+                for (int x = 0; x < Width; x++)
+                {
+                    SetPixel(x, y, pixel);
+                }
+            }
+        }
     }
 }
