@@ -19,7 +19,7 @@ namespace ConsoleGraphics
         [DllImport("kernel32.dll", SetLastError = true)]
         static extern bool WriteConsoleOutput(
             IntPtr hConsoleOutput,
-            CHAR_INFO[] lpBuffer,
+            IntPtr lpBuffer,
             Coord dwBufferSize,
             Coord dwBufferCoord,
             ref SmallRect lpWriteRegion
@@ -56,7 +56,7 @@ namespace ConsoleGraphics
             return new((ConsoleColor)((attributes >> 4) & 0x0F), (ConsoleColor)(attributes & 0x0F));
         }
 
-        public static void WriteBuffer(CHAR_INFO[] buffer, int width, int height)
+        public static void WriteBuffer(in CHAR_INFO[] buffer, int width, int height)
         {
             IntPtr handle = GetStdHandle(STD_OUTPUT_HANDLE);
 
@@ -64,7 +64,13 @@ namespace ConsoleGraphics
             Coord bufferCoord = new() { X = 0, Y = 0 };
             SmallRect writeRegion = new() { Left = 0, Top = 0, Right = (short)(width - 1), Bottom = (short)(height - 1) };
 
-            WriteConsoleOutput(handle, buffer, bufferSize, bufferCoord, ref writeRegion);
+            unsafe
+            {
+                fixed (CHAR_INFO* ptr = buffer)
+                {
+                    WriteConsoleOutput(handle, new IntPtr(ptr), bufferSize, bufferCoord, ref writeRegion);
+                }
+            }
         }
     }
 }
