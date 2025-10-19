@@ -14,8 +14,8 @@
 
         public void SetSize(int width, int height);
 
-        public void Flush(Pixel pixel);
-        public void SetPixel(int x, int y, Pixel pixel);
+        public void Flush(in Pixel pixel);
+        public void SetPixel(int x, int y, in Pixel pixel);
         public Pixel GetPixel(int x, int y);
     }
 }

@@ -15,6 +15,8 @@ namespace ConsoleGraphics.Rendering
 
         private Pixel[,] _pixels = new Pixel[1, 1];
 
+        private readonly StringBuilder stringBuilder = new();
+
         public Renderer(int width, int height) => SetSize(width, height);
 
         public void SetSize(int width, int height)
@@ -27,7 +29,8 @@ namespace ConsoleGraphics.Rendering
 
         public void Render()
         {
-            StringBuilder sb = new(_pixels.Length);
+            stringBuilder.Clear();
+
             int writeX = 0;
             int writeY = 0;
 
@@ -36,7 +39,7 @@ namespace ConsoleGraphics.Rendering
                 for (int x = 0; x < Width; x++)
                 {
                     Pixel current = _pixels[x, y];
-                    sb.Append($"{PixelLeft}{PixelRight}");
+                    stringBuilder.Append($"{PixelLeft}{PixelRight}");
 
                     void Write()
                     {
@@ -44,7 +47,7 @@ namespace ConsoleGraphics.Rendering
                         Console.ForegroundColor = current.ForeColor;
 
                         Console.SetCursorPosition(writeX, writeY);
-                        Console.Write(sb.ToString());
+                        Console.Write(stringBuilder.ToString());
                     }
 
                     int nextX = x + 1;
@@ -58,11 +61,11 @@ namespace ConsoleGraphics.Rendering
                         if (nextY >= Height)
                         {
                             Write();
-                            break;
+                            return;
                         }
                         else
                         {
-                            sb.AppendLine();
+                            stringBuilder.AppendLine();
                         }
                     }
 
@@ -71,7 +74,7 @@ namespace ConsoleGraphics.Rendering
                     if (next != current)
                     {
                         Write();
-                        sb.Clear();
+                        stringBuilder.Clear();
 
                         writeX = nextX * 2;
                         writeY = nextY;
@@ -80,10 +83,10 @@ namespace ConsoleGraphics.Rendering
             }
         }
 
-        public void SetPixel(int x, int y, Pixel pixel) => _pixels[x, y] = pixel;
+        public void SetPixel(int x, int y, in Pixel pixel) => _pixels[x, y] = pixel;
         public Pixel GetPixel(int x, int y) => _pixels[x, y];
 
-        public void Flush(Pixel pixel)
+        public void Flush(in Pixel pixel)
         {
             for (int y = 0; y < Height; y++)
             {
